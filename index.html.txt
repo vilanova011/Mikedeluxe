@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mike Deluxe — Loja</title>
+<style>
+  /* ======= VARS ======= */
+  :root{
+    --bg: #060606;
+    --card: #0f0f0f;
+    --gold: #d4af37;
+    --muted: #bdbdbd;
+    --white: #ffffff;
+    --glass: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--white);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    min-height:100vh;
+  }
+
+  /* ======= HEADER ======= */
+  header.site-header{
+    position:sticky; top:0; z-index:60;
+    background:linear-gradient(180deg, rgba(0,0,0,0.85), rgba(8,8,8,0.6));
+    border-bottom:1px solid rgba(255,255,255,0.03);
+    padding:12px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{
+    width:56px;height:56px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(90deg,#000,#111);border:2px solid var(--gold);
+  }
+  .brand-text h1{margin:0;font-size:18px;letter-spacing:1px}
+  .brand-text small{color:var(--muted);display:block;font-size:12px}
+
+  nav.site-nav{display:flex;gap:14px;align-items:center}
+  nav.site-nav a{color:var(--muted);text-decoration:none;font-weight:600}
+  nav.site-nav a:hover{color:var(--white)}
+
+  .header-actions{display:flex;align-items:center;gap:10px}
+  .icon-btn{
+    background:transparent;border:1px solid rgba(255,255,255,0.04);
+    color:var(--white);padding:8px 10px;border-radius:8px;cursor:pointer;
+  }
+
+  /* ======= HERO / BANNER ======= */
+  .hero{
+    display:flex;gap:24px;align-items:center;justify-content:space-between;
+    padding:36px 20px;background:linear-gradient(90deg, rgba(212,175,55,0.04), rgba(0,0,0,0.0));
+  }
+  .hero .left{max-width:60%}
+  .hero h2{margin:0;color:var(--gold);font-size:34px}
+  .hero p{margin:8px 0;color:var(--muted)}
+  .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--white);padding:10px 14px;border-radius:8px;cursor:pointer}
+  .btn.primary{background:var(--gold);color:#000;border:none;font-weight:700}
+  .hero .img{width:320px;max-width:40%;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+
+  /* ======= PRODUCTS GRID ======= */
+  .container{padding:18px 20px 60px}
+  .section-title{color:var(--gold);margin:8px 0 16px 0;font-size:20px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:18px;
+  }
+  .card{
+    background:var(--card);border-radius:10px;padding:12px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.6);display:flex;flex-direction:column;gap:8px;
+  }
+  .card img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+  .card h3{margin:6px 0 0 0;font-size:16px}
+  .price{color:var(--gold);font-weight:800;margin-top:6px}
+  .card .actions{margin-top:auto;display:flex;gap:8px;align-items:center}
+  .card .actions a{flex:1;text-align:center;padding:10px;border-radius:8px;text-decoration:none}
+  .card .actions .view{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--white)}
+  .card .actions .add{background:var(--gold);color:#000;font-weight:700;border:none;cursor:pointer}
+
+  /* ======= CART MODAL ======= */
+  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:80}
+  .modal.hidden{display:none}
+  .modal-card{background:linear-gradient(180deg,#0b0b0b,#0f0f0f);padding:16px;border-radius:10px;width:92%;max-width:700px;color:var(--white)}
+  .cart-item{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+  .cart-item img{width:72px;height:72px;object-fit:cover;border-radius:8px}
+  .cart-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+  .close-btn{float:right;background:transparent;border:none;color:var(--muted);cursor:pointer}
+
+  /* ======= FOOTER ======= */
+  footer.site-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center;color:var(--muted)}
+
+  /* ======= RESPONSIVE ======= */
+  @media(max-width:880px){
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero .img{max-width:100%;width:100%}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    <div class="logo" aria-hidden>
+      <!-- simple gold text logo -->
+      <svg width="44" height="44" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <rect width="120" height="120" fill="#070707" rx="12"/>
+        <text x="12" y="78" fill="#d4af37" font-family="Arial" font-size="56" font-weight="700">M</text>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <h1>Mike Deluxe</h1>
+      <small>Estilo e Exclusividade</small>
+    </div>
+  </div>
+
+  <nav class="site-nav" aria-label="Menu principal">
+    <a href="#home">Início</a>
+    <a href="#produtos">Produtos</a>
+    <a href="#contato">Contato</a>
+  </nav>
+
+  <div class="header-actions">
+    <button class="icon-btn" id="open-cart">Carrinho (<span id="cart-count">0</span>)</button>
+  </div>
+</header>
+
+<!-- HERO / BANNER -->
+<section class="hero" id="home">
+  <div class="left">
+    <h2>Luxo ao seu alcance</h2>
+    <p>Peças selecionadas com estilo premium. Confira nossos lançamentos e monte seu visual.</p>
+    <div style="margin-top:12px">
+      <button class="btn primary" onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">Ver Produtos</button>
+    </div>
+  </div>
+  <img class="img" src="https://images.unsplash.com/photo-1520975698516-0d586c8b7b5b?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=0f6a796e0f5b3a3f2b2ef0f4b932c2d0" alt="Banner Mike Deluxe">
+</section>
+
+<!-- PRODUCTS -->
+<main class="container">
+  <h3 class="section-title" id="produtos">Destaques</h3>
+
+  <div class="grid" id="grid">
+    <!-- PRODUCT CARDS (rendered by JS) -->
+  </div>
+</main>
+
+<!-- CART MODAL -->
+<div id="cart-modal" class="modal hidden" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true">
+    <button class="close-btn" id="close-cart">Fechar ✕</button>
+    <h3>Seu Carrinho</h3>
+    <div id="cart-items"></div>
+    <div class="cart-footer">
+      <div><strong>Total:</strong> <span id="cart-total">R$ 0,00</span></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn" id="clear-cart">Limpar</button>
+        <button class="btn primary" id="checkout">Finalizar Compra</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL (detail) -->
+<div id="product-modal" class="modal hidden" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" style="max-width:820px;">
+    <button class="close-btn" id="close-product">Fechar ✕</button>
+    <div id="product-detail" style="display:flex;gap:16px;flex-wrap:wrap">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer" id="contato">
+  <div>
+    <strong>Mike Deluxe</strong><br>
+    <small>© 2025 Mike Deluxe</small>
+  </div>
+  <div class="socials">
+    <a href="#" style="color:var(--muted);text-decoration:none">Instagram</a> ·
+    <a href="#" style="color:var(--muted);text-decoration:none">WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+/* ==========================
+   DATA: edite aqui seus produtos
+   Cada produto: id, name, price (number), image (URL), description
+   ========================== */
+const products = [
+  { id:1, name:"Camiseta Mike Deluxe", price:89.90,
+    image:"https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?q=80&w=800&auto=format&fit=crop",
+    description:"Camiseta premium com tecido confortável e corte moderno." },
+  { id:2, name:"Tênis Dunk Low", price:499.90,
+    image:"https://images.unsplash.com/photo-1519741491816-1e377a1d2d3a?q=80&w=800&auto=format&fit=crop",
+    description:"Tênis estilo urbano com sola reforçada e acabamento premium." },
+  { id:3, name:"Boné Premium", price:79.90,
+    image:"https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop",
+    description:"Boné ajustável com logo bordado e acabamento superior." },
+  { id:4, name:"Bermuda Casual", price:129.90,
+    image:"https://images.unsplash.com/photo-1556909214-62c3f2d9d2e4?q=80&w=800&auto=format&fit=crop",
+    description:"Bermuda confortável, ideal para o dia a dia." }
+];
+
+/* ======= UTIL ======= */
+function formatPrice(v){ return "R$ " + v.toFixed(2).replace('.',','); }
+
+/* ======= RENDER PRODUCTS ======= */
+const grid = document.getElementById('grid');
+function renderProducts(){
+  grid.innerHTML = '';
+  products.forEach(p=>{
+    const card = document.createElement('div'); card.className='card';
+    card.innerHTML = `
+      <img src="${p.image}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <div class="price">${formatPrice(p.price)}</div>
+      <div class="actions">
+        <a class="view" href="javascript:void(0)" onclick="openProduct(${p.id})">Ver</a>
+        <button class="add" onclick="addToCart(${p.id})">Adicionar</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* ======= CART (localStorage) ======= */
+function getCart(){ try{ return JSON.parse(localStorage.getItem('md_cart')||'[]'); }catch(e){return []} }
+function saveCart(c){ localStorage.setItem('md_cart', JSON.stringify(c)); renderCartCount(); renderCartItems(); }
+function addToCart(id, qty=1){
+  const prod = products.find(x=>x.id===id); if(!prod) return alert('Produto não encontrado');
+  const cart = getCart(); const item = cart.find(i=>i.id===id);
+  if(item) item.qty += qty; else cart.push({ id:prod.id, name:prod.name, price:prod.price, image:prod.image, qty:qty });
+  saveCart(cart);
+  toast('Produto adicionado ao carrinho');
+}
+function removeFromCart(id){ const cart = getCart().filter(i=>i.id!==id); saveCart(cart); }
+function changeQty(id, delta){ const cart = getCart(); const it = cart.find(i=>i.id===id); if(!it) return; it.qty += delta; if(it.qty<1) it.qty=1; saveCart(cart); }
+function cartTotal(){ return getCart().reduce((s,i)=>s + (i.price*i.qty), 0); }
+
+function renderCartCount(){
+  const count = getCart().reduce((s,i)=>s+i.qty,0); document.getElementById('cart-count').innerText = count;
+}
+
+/* ======= RENDER CART UI ======= */
+function renderCartItems(){
+  const container = document.getElementById('cart-items');
+  if(!container) return;
+  const c = getCart();
+  container.innerHTML = '';
+  if(c.length===0){ container.innerHTML = '<p>Seu carrinho está vazio.</p>'; document.getElementById('cart-total').innerText = formatPrice(0); renderCartCount(); return; }
+  c.forEach(it=>{
+    const div = document.createElement('div'); div.className='cart-item';
+    div.innerHTML = `
+      <img src="${it.image}" alt="${it.name}">
+      <div style="flex:1">
+        <div style="font-weight:700">${it.name}</div>
+        <div style="color:var(--muted)">${formatPrice(it.price)} • Qtd: ${it.qty}</div>
+        <div style="margin-top:8px">
+          <button class="btn" onclick="changeQty(${it.id},-1)">-</button>
+          <button class="btn" onclick="changeQty(${it.id},1)">+</button>
+          <button class="btn" onclick="removeFromCart(${it.id})">Remover</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+  document.getElementById('cart-total').innerText = formatPrice(cartTotal());
+  renderCartCount();
+}
+
+/* ======= CART MODAL CONTROLS ======= */
+const cartModal = document.getElementById('cart-modal');
+document.getElementById('open-cart').addEventListener('click', ()=>{ cartModal.classList.remove('hidden'); cartModal.setAttribute('aria-hidden','false'); renderCartItems(); });
+document.getElementById('close-cart').addEventListener('click', ()=>{ cartModal.classList.add('hidden'); cartModal.setAttribute('aria-hidden','true'); });
+
+document.getElementById('clear-cart').addEventListener('click', ()=>{ saveCart([]); });
+
+document.getElementById('checkout').addEventListener('click', ()=> {
+  const c = getCart(); if(c.length===0) return alert('Seu carrinho está vazio.');
+  const total = cartTotal();
+  // Simulated payment flow
+  alert('Compra simulada concluída!\nTotal: ' + formatPrice(total) + '\nObrigado pela preferência.');
+  saveCart([]);
+  cartModal.classList.add('hidden');
+});
+
+/* ======= PRODUCT DETAIL MODAL ======= */
+const productModal = document.getElementById('product-modal');
+function openProduct(id){
+  const p = products.find(x=>x.id===id); if(!p) return;
+  const container = document.getElementById('product-detail');
+  container.innerHTML = `
+    <div style="flex:1;min-width:280px">
+      <img src="${p.image}" alt="${p.name}" style="width:100%;border-radius:8px">
+    </div>
+    <div style="flex:1;min-width:260px">
+      <h2 style="color:var(--gold)">${p.name}</h2>
+      <p style="color:var(--muted)">${p.description}</p>
+      <div style="font-weight:800;font-size:20px;margin:10px 0">${formatPrice(p.price)}</div>
+      <div style="display:flex;gap:10px">
+        <button class="btn primary" onclick="buyNow(${p.id})">Comprar agora</button>
+        <button class="btn" onclick="addToCart(${p.id})">Adicionar ao carrinho</button>
+      </div>
+    </div>
+  `;
+  productModal.classList.remove('hidden'); productModal.setAttribute('aria-hidden','false');
+}
+document.getElementById('close-product').addEventListener('click', ()=>{ productModal.classList.add('hidden'); productModal.setAttribute('aria-hidden','true'); });
+
+/* Buy now: add + checkout simulated */
+function buyNow(id){ addToCart(id,1); setTimeout(()=>{ document.getElementById('checkout').click(); }, 200); }
+
+/* Small toast helper */
+function toast(msg){ try{ if(window.navigator && window.navigator.vibrate) window.navigator.vibrate(30); }catch(e){} alert(msg); }
+
+/* INIT */
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderProducts();
+  renderCartCount();
+});
+</script>
+</body>
+</html>
